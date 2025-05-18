@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://islamic-finance-game.vercel.app/",
+    url: "https://isfin.vercel.app/",
     title: "Islamic Finance Game App",
     description: "An interactive game exploring Islamic financial ethics and decision-making",
     siteName: "Islamic Finance Game App",

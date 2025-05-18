@@ -3,4 +3,4 @@ User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://islamic-finance-game.vercel.app/sitemap.xml
+Sitemap: https://isfin.vercel.app/sitemap.xml
