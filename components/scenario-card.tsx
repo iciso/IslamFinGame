@@ -1,11 +1,41 @@
 "use client"
 
+import type React from "react"
+
 import { type Scenario, type Choice, useGameStore } from "@/store/game-store"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
-import { CheckCircle, HelpCircle } from "lucide-react"
+import {
+  CheckCircle,
+  HelpCircle,
+  HandCoins,
+  School,
+  Users,
+  Heart,
+  Building,
+  BookOpen,
+  PiggyBank,
+  Handshake,
+  UserCheck,
+  GraduationCap,
+  Home,
+  Gift,
+  Landmark,
+  Scale,
+  Briefcase,
+  Share2,
+  UsersRound,
+  Award,
+  HeartHandshake,
+  Lightbulb,
+  Coins,
+  FileText,
+  Banknote,
+  Building2,
+  Brain,
+  Sparkles,
+} from "lucide-react"
 import { useState } from "react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
@@ -23,6 +53,161 @@ export function ScenarioCard({ scenario, showOutcome, selectedChoice, onContinue
 
   // Special handling for the start scenario
   const isStartScenario = scenario.id === "start"
+
+  // Map scenario IDs to icons and background colors
+  const getScenarioVisuals = () => {
+    const visuals: Record<string, { icon: React.ReactNode; bgClass: string; title: string }> = {
+      start: {
+        icon: <Sparkles size={48} />,
+        bgClass: "bg-gradient-to-br from-emerald-400 to-teal-600",
+        title: "Islamic Financial Ethics Journey",
+      },
+      "family-request": {
+        icon: <HandCoins size={48} />,
+        bgClass: "bg-gradient-to-br from-emerald-500 to-green-700",
+        title: "Family Financial Request",
+      },
+      "loan-terms": {
+        icon: <FileText size={48} />,
+        bgClass: "bg-gradient-to-br from-teal-500 to-emerald-700",
+        title: "Setting Loan Terms",
+      },
+      "after-refusal": {
+        icon: <Users size={48} />,
+        bgClass: "bg-gradient-to-br from-amber-500 to-orange-700",
+        title: "After Refusing Help",
+      },
+      "after-charity": {
+        icon: <Heart size={48} />,
+        bgClass: "bg-gradient-to-br from-rose-400 to-pink-600",
+        title: "Impact of Your Charity",
+      },
+      "after-direct-payment": {
+        icon: <School size={48} />,
+        bgClass: "bg-gradient-to-br from-blue-400 to-indigo-600",
+        title: "School Recognition",
+      },
+      "inner-struggle": {
+        icon: <Brain size={48} />,
+        bgClass: "bg-gradient-to-br from-purple-400 to-violet-600",
+        title: "Inner Ethical Struggle",
+      },
+      "worldly-distraction": {
+        icon: <Coins size={48} />,
+        bgClass: "bg-gradient-to-br from-amber-400 to-yellow-600",
+        title: "Worldly Success vs. Spiritual Growth",
+      },
+      "wealth-test": {
+        icon: <Scale size={48} />,
+        bgClass: "bg-gradient-to-br from-orange-400 to-red-600",
+        title: "The Test of Wealth",
+      },
+      "spiritual-awakening": {
+        icon: <Lightbulb size={48} />,
+        bgClass: "bg-gradient-to-br from-cyan-400 to-blue-600",
+        title: "Spiritual Renewal",
+      },
+      "delayed-charity": {
+        icon: <PiggyBank size={48} />,
+        bgClass: "bg-gradient-to-br from-lime-400 to-green-600",
+        title: "The Delayed Charity",
+      },
+      reconciliation: {
+        icon: <HeartHandshake size={48} />,
+        bgClass: "bg-gradient-to-br from-pink-400 to-rose-600",
+        title: "Family Reconciliation",
+      },
+      "loan-repayment": {
+        icon: <Banknote size={48} />,
+        bgClass: "bg-gradient-to-br from-green-400 to-emerald-600",
+        title: "Loan Repayment Situation",
+      },
+      "community-resources": {
+        icon: <Building size={48} />,
+        bgClass: "bg-gradient-to-br from-indigo-400 to-purple-600",
+        title: "Developing Community Resources",
+      },
+      "waqf-establishment": {
+        icon: <Landmark size={48} />,
+        bgClass: "bg-gradient-to-br from-blue-400 to-sky-600",
+        title: "Establishing an Educational Waqf",
+      },
+      "takaful-system": {
+        icon: <UsersRound size={48} />,
+        bgClass: "bg-gradient-to-br from-teal-400 to-cyan-600",
+        title: "Family Takaful System",
+      },
+      "islamic-business-partnership": {
+        icon: <Handshake size={48} />,
+        bgClass: "bg-gradient-to-br from-amber-400 to-orange-600",
+        title: "Islamic Business Partnership",
+      },
+      "business-outcomes": {
+        icon: <Briefcase size={48} />,
+        bgClass: "bg-gradient-to-br from-emerald-400 to-green-600",
+        title: "Business Growth and Decisions",
+      },
+      "islamic-finance-education": {
+        icon: <BookOpen size={48} />,
+        bgClass: "bg-gradient-to-br from-sky-400 to-blue-600",
+        title: "Deepening Financial Knowledge",
+      },
+      "knowledge-application": {
+        icon: <Share2 size={48} />,
+        bgClass: "bg-gradient-to-br from-violet-400 to-purple-600",
+        title: "Applying Financial Knowledge",
+      },
+      "family-relations": {
+        icon: <Home size={48} />,
+        bgClass: "bg-gradient-to-br from-rose-400 to-pink-600",
+        title: "Family Financial Dynamics",
+      },
+      "anonymous-giving": {
+        icon: <Gift size={48} />,
+        bgClass: "bg-gradient-to-br from-emerald-400 to-teal-600",
+        title: "The Power of Anonymous Charity",
+      },
+      "charity-impact": {
+        icon: <Sparkles size={48} />,
+        bgClass: "bg-gradient-to-br from-amber-400 to-orange-600",
+        title: "The Ripple Effect of Charity",
+      },
+      "education-outcomes": {
+        icon: <GraduationCap size={48} />,
+        bgClass: "bg-gradient-to-br from-blue-400 to-indigo-600",
+        title: "Educational Impact",
+      },
+      mentorship: {
+        icon: <UserCheck size={48} />,
+        bgClass: "bg-gradient-to-br from-purple-400 to-violet-600",
+        title: "The Mentorship Journey",
+      },
+      "community-impact": {
+        icon: <Building2 size={48} />,
+        bgClass: "bg-gradient-to-br from-teal-400 to-emerald-600",
+        title: "Transforming Community Financial Practices",
+      },
+      "final-reflection": {
+        icon: <Brain size={48} />,
+        bgClass: "bg-gradient-to-br from-cyan-400 to-blue-600",
+        title: "Journey Reflection",
+      },
+      end: {
+        icon: <Award size={48} />,
+        bgClass: "bg-gradient-to-br from-emerald-400 to-green-600",
+        title: "Journey Completion",
+      },
+    }
+
+    // Default visuals if scenario ID is not found
+    const defaultVisuals = {
+      icon: <BookOpen size={48} />,
+      bgClass: "bg-gradient-to-br from-gray-400 to-gray-600",
+      title: scenario.title,
+    }
+
+    return visuals[scenario.id] || defaultVisuals
+  }
 
   // Islamic financial terms glossary
   const islamicTerms: Record<string, { definition: string; source?: string }> = {
@@ -156,16 +341,22 @@ export function ScenarioCard({ scenario, showOutcome, selectedChoice, onContinue
 
   // Function to render text with Islamic terms highlighted and explained
   const renderText = (text: string) => {
+    // First, clean any malformed HTML tags or pre-formatted HTML
     let processedText = text
+      // Fix specific malformed tags patterns
+      .replace(/<-term="([^"]+)">([^<]+)span>/g, "($1)")
+      .replace(/<term="([^"]+)">([^<]+)span>/g, "$2")
+      // Remove any HTML-like content
+      .replace(/<[^>]*>/g, "")
 
-    // Check for Islamic terms in the text
+    // Check for Islamic terms in the cleaned text
     Object.keys(islamicTerms).forEach((term) => {
       // Create a regex that matches the term as a whole word, case-insensitive
       const regex = new RegExp(`\\b${term}\\b`, "gi")
 
-      if (regex.test(text)) {
+      if (regex.test(processedText)) {
         processedText = processedText.replace(regex, (match) => {
-          return `<span class="text-emerald-600 dark:text-emerald-400 font-medium underline cursor-pointer" data-term="${term}">${match}</span>`
+          return `<span class="text-emerald-600 dark:text-emerald-400 font-medium underline cursor-pointer hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-colors break-words" data-term="${term}">${match}</span>`
         })
       }
     })
@@ -203,14 +394,21 @@ export function ScenarioCard({ scenario, showOutcome, selectedChoice, onContinue
     )
   }
 
+  const scenarioVisuals = getScenarioVisuals()
+
   return (
     <>
       <Card className="w-full overflow-hidden border-2 border-emerald-200 dark:border-emerald-800 shadow-lg">
-        {scenario.image && (
-          <div className="relative w-full h-64">
-            <Image src={scenario.image || "/placeholder.svg"} alt={scenario.title} fill className="object-cover" />
+        {/* Image section replaced with colored background and icon */}
+        <div
+          className={`relative w-full h-64 overflow-hidden ${scenarioVisuals.bgClass} flex items-center justify-center`}
+        >
+          <div className="text-white">
+            {scenarioVisuals.icon}
+            <h2 className="mt-4 text-xl font-bold">{scenarioVisuals.title}</h2>
           </div>
-        )}
+        </div>
+
         <CardHeader className="bg-emerald-50 dark:bg-emerald-900">
           <CardTitle className="text-2xl text-emerald-800 dark:text-emerald-200">{scenario.title}</CardTitle>
           <CardDescription className="text-emerald-700 dark:text-emerald-300 text-base">
@@ -231,9 +429,13 @@ export function ScenarioCard({ scenario, showOutcome, selectedChoice, onContinue
                   <div className="mt-1 text-emerald-600 dark:text-emerald-400">
                     <CheckCircle size={20} />
                   </div>
-                  <div>
-                    <h3 className="font-medium text-emerald-800 dark:text-emerald-200 mb-1">{selectedChoice.text}</h3>
-                    <p className="text-emerald-700 dark:text-emerald-300">{renderText(selectedChoice.outcome)}</p>
+                  <div className="break-words">
+                    <h3 className="font-medium text-emerald-800 dark:text-emerald-200 mb-1 break-words">
+                      {selectedChoice.text}
+                    </h3>
+                    <p className="text-emerald-700 dark:text-emerald-300 break-words">
+                      {renderText(selectedChoice.outcome)}
+                    </p>
                     <div className="mt-2 text-sm text-emerald-600 dark:text-emerald-400">
                       {selectedChoice.score > 0 ? (
                         <span>+{selectedChoice.score} points</span>
@@ -243,7 +445,7 @@ export function ScenarioCard({ scenario, showOutcome, selectedChoice, onContinue
                         <span>No points</span>
                       )}
                       {selectedChoice.tags.length > 0 && (
-                        <span className="ml-2">
+                        <span className="ml-2 block sm:inline mt-1 sm:mt-0">
                           (Traits:{" "}
                           {selectedChoice.tags.map((tag) => tag.charAt(0).toUpperCase() + tag.slice(1)).join(", ")})
                         </span>
@@ -277,10 +479,10 @@ export function ScenarioCard({ scenario, showOutcome, selectedChoice, onContinue
                     <motion.div key={choice.id} whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}>
                       <Button
                         variant="outline"
-                        className="w-full justify-start p-4 h-auto text-left border-2 border-emerald-100 hover:border-emerald-300 hover:bg-emerald-50 dark:border-emerald-800 dark:hover:border-emerald-700 dark:hover:bg-emerald-900"
+                        className="w-full justify-start p-4 h-auto text-left border-2 border-emerald-100 hover:border-emerald-300 hover:bg-emerald-50 dark:border-emerald-800 dark:hover:border-emerald-700 dark:hover:bg-emerald-900 break-words whitespace-normal"
                         onClick={() => selectChoice(choice)}
                       >
-                        <span>{renderText(choice.text)}</span>
+                        <span className="break-words whitespace-normal">{renderText(choice.text)}</span>
                       </Button>
                     </motion.div>
                   ))
