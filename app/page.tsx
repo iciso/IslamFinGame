@@ -21,7 +21,7 @@ export default function Page() {
     <div className="flex flex-col items-center justify-center min-h-screen py-2 bg-gray-100 dark:bg-gray-900">
       <main className="flex flex-col items-center justify-center w-full flex-1 px-4 sm:px-20 text-center">
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-emerald-600 dark:text-emerald-400 mb-4">
-          Islamic Ethics Game
+          Islamic Finance Game
         </h1>
 
         <div className="w-full max-w-4xl">
